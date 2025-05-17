@@ -31,7 +31,10 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
+
+    // db collections
     const coffeesCollection = client.db('coffeeDB').collection('coffees');
+    const usersCollection = client.db('coffeeDB').collection('users');
 
     app.get('/coffees', async(req,res) =>{
         // const cursor = coffeesCollection.find();
@@ -80,6 +83,16 @@ async function run() {
     })
 
 
+    // user related APIs
+
+    app.post('/users', async(req, res) =>{
+      const userProfile = req.body;
+      console.log(userProfile)
+      const result = await usersCollection.insertOne(userProfile);
+      res.send(result);
+    })
+
+
 
 
     // Send a ping to confirm a successful connection
@@ -87,7 +100,7 @@ async function run() {
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
-    // await client.close();
+    
   }
 }
 run().catch(console.dir);
